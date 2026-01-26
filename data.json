@@ -1,6 +1,7 @@
 [
   {
     "title": "Team relationship to technology",
+    "question": "What technology does this team actually own or steward?",
     "items": [
       {
         "principle": "No stable relationship",
@@ -30,6 +31,7 @@
   },
   {
     "title": "Team relationship to customers",
+    "question": "Who interacts with customers, and how does customer understanding reach the team?",
     "items": [
       {
         "principle": "Transactional service relationship",
@@ -55,6 +57,7 @@
   },
   {
     "title": "Team relationship to funding",
+    "question": "Why does this team receive budget and headcount?",
     "items": [
       {
         "principle": "Project-based funding",
@@ -96,6 +99,7 @@
   },
   {
     "title": "How team performance is assessed",
+    "question": "What does this team get praised or criticized for?",
     "items": [
       {
         "principle": "Plan conformance",
@@ -145,6 +149,7 @@
   },
   {
     "title": "Team relationship to work",
+    "question": "Where does this team's work actually come from?",
     "items": [
       {
         "principle": "Externally requested features",
@@ -186,6 +191,7 @@
   },
   {
     "title": "How high level intent is communicated",
+    "question": "How is strategy or direction communicated to this team?",
     "items": [
       {
         "principle": "Project or program directives",
@@ -227,6 +233,7 @@
   },
   {
     "title": "Team mandate levels",
+    "question": "What kind of mandate is this team being given?",
     "items": [
       {
         "principle": "Build to specification",
