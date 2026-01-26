@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Org Sensing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="mb-12">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Org Sensing</h1>
+                    <p class="text-gray-600 text-lg">Understanding team relationships and organizational principles</p>
+                </div>
+                <div class="flex gap-3">
+                    <button id="shareButton" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors duration-200">
+                        Share
+                    </button>
+                    <button id="clearButton" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-sm transition-colors duration-200">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div id="content" class="space-y-8">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-900">Share Org Sensing</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <p class="text-gray-600 mb-4">Add a short note to include with your shared selections (optional):</p>
+            <textarea 
+                id="noteInput" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" 
+                rows="4" 
+                placeholder="Enter your note here..."
+            ></textarea>
+            <div class="flex gap-3 mt-6">
+                <button id="cancelShare" class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition-colors duration-200">
+                    Cancel
+                </button>
+                <button id="confirmShare" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200">
+                    Generate Link
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store sections data globally for share functionality
+        let sectionsData = [];
+        
+        // Clear all checkboxes
+        function clearAll() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                const card = checkbox.closest('[data-section-index]');
+                if (card) {
+                    card.classList.remove('bg-blue-50', 'border-blue-500');
+                    card.classList.add('bg-gray-50', 'border-gray-200');
+                }
+            });
+            
+            // Clear URL parameters (remove shared state)
+            const url = new URL(window.location.href);
+            url.search = ''; // Remove all query parameters
+            window.history.replaceState({}, '', url.toString());
+            
+            // Remove note banner if it exists
+            const noteBanner = document.querySelector('.bg-blue-50.border-l-4.border-blue-500');
+            if (noteBanner) {
+                noteBanner.remove();
+            }
+        }
+        
+        // Get all selected items
+        function getSelectedItems() {
+            const selected = [];
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('[data-section-index]');
+                if (card) {
+                    selected.push({
+                        section: parseInt(card.dataset.sectionIndex),
+                        item: parseInt(card.dataset.itemIndex)
+                    });
+                }
+            });
+            return selected;
+        }
+        
+        // Encode selections to URL parameter
+        function encodeSelections(selections) {
+            if (selections.length === 0) return '';
+            // Encode as base64 JSON for compactness
+            const json = JSON.stringify(selections);
+            return btoa(json);
+        }
+        
+        // Decode selections from URL parameter
+        function decodeSelections(encoded) {
+            if (!encoded) return [];
+            try {
+                const json = atob(encoded);
+                return JSON.parse(json);
+            } catch (e) {
+                console.error('Error decoding selections:', e);
+                return [];
+            }
+        }
+        
+        // Modal functions
+        function showShareModal() {
+            const modal = document.getElementById('shareModal');
+            const noteInput = document.getElementById('noteInput');
+            modal.classList.remove('hidden');
+            noteInput.focus();
+        }
+        
+        function hideShareModal() {
+            const modal = document.getElementById('shareModal');
+            const noteInput = document.getElementById('noteInput');
+            modal.classList.add('hidden');
+            noteInput.value = '';
+        }
+        
+        // Share functionality
+        async function generateShareLink() {
+            const selected = getSelectedItems();
+            
+            if (selected.length === 0) {
+                alert('Please select at least one option before sharing.');
+                hideShareModal();
+                return;
+            }
+            
+            // Get note from modal
+            const note = document.getElementById('noteInput').value.trim();
+            
+            // Encode data
+            const encodedSelections = encodeSelections(selected);
+            const encodedNote = encodeURIComponent(note || '');
+            
+            // Create shareable URL
+            const url = new URL(window.location.href);
+            url.searchParams.set('note', encodedNote);
+            url.searchParams.set('selections', encodedSelections);
+            
+            const shareUrl = url.toString();
+            
+            // Copy to clipboard
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                
+                // Hide modal
+                hideShareModal();
+                
+                // Show success message
+                const shareButton = document.getElementById('shareButton');
+                const originalText = shareButton.textContent;
+                shareButton.textContent = 'Copied!';
+                shareButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                shareButton.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                setTimeout(() => {
+                    shareButton.textContent = originalText;
+                    shareButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    shareButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            } catch (err) {
+                // Fallback: show URL in alert
+                hideShareModal();
+                alert('Copy this URL to share:\n\n' + shareUrl);
+            }
+        }
+        
+        function openShareModal() {
+            const selected = getSelectedItems();
+            
+            if (selected.length === 0) {
+                alert('Please select at least one option before sharing.');
+                return;
+            }
+            
+            showShareModal();
+        }
+        
+        // Restore selections from URL
+        function restoreSelections() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedSelections = urlParams.get('selections');
+            const encodedNote = urlParams.get('note');
+            
+            if (!encodedSelections) return;
+            
+            const selections = decodeSelections(encodedSelections);
+            
+            // Restore note if present
+            if (encodedNote) {
+                const note = decodeURIComponent(encodedNote);
+                if (note) {
+                    // Display note somewhere (maybe in header or as a banner)
+                    const noteBanner = document.createElement('div');
+                    noteBanner.className = 'bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded';
+                    noteBanner.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm font-semibold text-blue-800 mb-1">Shared Note:</p>
+                                <p class="text-blue-700">${note}</p>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="text-blue-600 hover:text-blue-800">×</button>
+                        </div>
+                    `;
+                    const header = document.querySelector('header');
+                    header.insertAdjacentElement('afterend', noteBanner);
+                }
+            }
+            
+            // Restore selections
+            selections.forEach(({ section, item }) => {
+                const checkbox = document.getElementById(`checkbox-${section}-${item}`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                    const card = checkbox.closest('[data-section-index]');
+                    if (card) {
+                        card.classList.remove('bg-gray-50', 'border-gray-200');
+                        card.classList.add('bg-blue-50', 'border-blue-500');
+                    }
+                }
+            });
+        }
+        
+        // Update loadData to store sections and restore selections
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                sectionsData = await response.json();
+                
+                const contentDiv = document.getElementById('content');
+                
+                sectionsData.forEach((section, sectionIndex) => {
+                    // Create section container
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
+                    
+                    // Section header
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4';
+                    const title = document.createElement('h2');
+                    title.className = 'text-2xl font-semibold text-white';
+                    title.textContent = section.title;
+                    headerDiv.appendChild(title);
+                    sectionDiv.appendChild(headerDiv);
+                    
+                    // Items container
+                    const itemsDiv = document.createElement('div');
+                    itemsDiv.className = 'p-6';
+                    
+                    // Create grid for items
+                    const gridDiv = document.createElement('div');
+                    gridDiv.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+                    
+                    section.items.forEach((item, itemIndex) => {
+                        const itemCard = document.createElement('div');
+                        itemCard.className = 'bg-gray-50 rounded-lg p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative';
+                        itemCard.dataset.sectionIndex = sectionIndex;
+                        itemCard.dataset.itemIndex = itemIndex;
+                        
+                        // Create checkbox
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'absolute top-4 right-4 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer';
+                        checkbox.id = `checkbox-${sectionIndex}-${itemIndex}`;
+                        itemCard.appendChild(checkbox);
+                        
+                        // Card content wrapper
+                        const contentWrapper = document.createElement('div');
+                        contentWrapper.className = 'pr-8';
+                        
+                        const principle = document.createElement('h3');
+                        principle.className = 'text-lg font-semibold text-gray-900 mb-2';
+                        principle.textContent = item.principle;
+                        contentWrapper.appendChild(principle);
+                        
+                        const description = document.createElement('p');
+                        description.className = 'text-gray-700 text-sm leading-relaxed';
+                        description.textContent = item.description;
+                        contentWrapper.appendChild(description);
+                        
+                        itemCard.appendChild(contentWrapper);
+                        
+                        // Toggle functionality
+                        const toggleCard = (e) => {
+                            // Don't toggle if clicking directly on checkbox (it handles itself)
+                            if (e.target === checkbox) return;
+                            
+                            checkbox.checked = !checkbox.checked;
+                            updateCardStyle(itemCard, checkbox.checked);
+                        };
+                        
+                        const updateCardStyle = (card, isChecked) => {
+                            if (isChecked) {
+                                card.classList.remove('bg-gray-50', 'border-gray-200');
+                                card.classList.add('bg-blue-50', 'border-blue-500');
+                            } else {
+                                card.classList.remove('bg-blue-50', 'border-blue-500');
+                                card.classList.add('bg-gray-50', 'border-gray-200');
+                            }
+                        };
+                        
+                        itemCard.addEventListener('click', toggleCard);
+                        checkbox.addEventListener('change', (e) => {
+                            updateCardStyle(itemCard, e.target.checked);
+                        });
+                        
+                        gridDiv.appendChild(itemCard);
+                    });
+                    
+                    itemsDiv.appendChild(gridDiv);
+                    sectionDiv.appendChild(itemsDiv);
+                    
+                    contentDiv.appendChild(sectionDiv);
+                });
+                
+                // Restore selections after DOM is built
+                setTimeout(restoreSelections, 100);
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                const contentDiv = document.getElementById('content');
+                contentDiv.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold text-red-800 mb-2">Error Loading Data</h2>
+                        <p class="text-red-600">Could not load data.json. Please make sure the file exists.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Set up buttons
+        document.getElementById('clearButton').addEventListener('click', clearAll);
+        document.getElementById('shareButton').addEventListener('click', openShareModal);
+        document.getElementById('confirmShare').addEventListener('click', generateShareLink);
+        document.getElementById('cancelShare').addEventListener('click', hideShareModal);
+        document.getElementById('closeModal').addEventListener('click', hideShareModal);
+        
+        // Close modal when clicking outside
+        document.getElementById('shareModal').addEventListener('click', (e) => {
+            if (e.target.id === 'shareModal') {
+                hideShareModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideShareModal();
+            }
+        });
+        
+        // Load data when page loads
+        loadData();
+    </script>
+</body>
+</html>

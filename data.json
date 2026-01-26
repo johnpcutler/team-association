@@ -1,0 +1,269 @@
+[
+  {
+    "title": "Team relationship to technology",
+    "items": [
+      {
+        "principle": "No stable relationship",
+        "description": "Teams dissolve after projects. Technology ownership is incidental."
+      },
+      {
+        "principle": "Skills in specific technologies",
+        "description": "Teams grouped by expertise in particular technologies. They do not own running systems. Ownership sits elsewhere."
+      },
+      {
+        "principle": "Vendors or tools",
+        "description": "Teams organized around administering and integrating specific external systems."
+      },
+      {
+        "principle": "Components or technical layers",
+        "description": "Teams own parts of the architecture or infrastructure stack."
+      },
+      {
+        "principle": "Capabilities or platforms",
+        "description": "Teams own a reusable capability in the value chain. They provide services to multiple products or domains."
+      },
+      {
+        "principle": "Whole products or domains",
+        "description": "Teams own a combination of technologies primarily in service of a business domain, problem domain, or value stream."
+      }
+    ]
+  },
+  {
+    "title": "Team relationship to customers",
+    "items": [
+      {
+        "principle": "Transactional service relationship",
+        "description": "Customers submit requests. Teams fulfill them. Little or no shared understanding of underlying needs."
+      },
+      {
+        "principle": "Customer understanding mediated by proxies",
+        "description": "Intermediary roles (sales, account managers, analysts, business stakeholders) interact with customers and interpret needs for the team."
+      },
+      {
+        "principle": "Product or design-led mediation",
+        "description": "Product managers or designers interact directly with customers. They synthesize insights and shape team understanding."
+      },
+      {
+        "principle": "Direct team–customer interaction (role-based)",
+        "description": "Some team members interact directly with customers and participate in discovery and shared understanding."
+      },
+      {
+        "principle": "Whole-team customer engagement",
+        "description": "The entire team regularly interacts with customers. Customer insight and synthesis are shared team responsibilities."
+      }
+    ]
+  },
+  {
+    "title": "Team relationship to funding",
+    "items": [
+      {
+        "principle": "Project-based funding",
+        "description": "Teams funded to deliver a specific project. Funding ends when the project ends."
+      },
+      {
+        "principle": "Ratio-based service funding",
+        "description": "Teams funded using staffing ratios tied to requests, tickets, users, or managed tools."
+      },
+      {
+        "principle": "Program or project-attached funding with BAU remnant",
+        "description": "Teams funded through participation in funded programs and/or projects, plus residual operational ownership."
+      },
+      {
+        "principle": "Revenue- or product-line–adjacent funding",
+        "description": "Teams funded as an allocation against a product, business line, or revenue stream."
+      },
+      {
+        "principle": "Demand-based chargeback funding",
+        "description": "Teams funded through internal chargeback or showback. Funding scales with actual service consumption."
+      },
+      {
+        "principle": "Cost-center or forecast-based funding",
+        "description": "Teams funded through annual budget or capacity planning based on forecasted demand, rather than per-work approval."
+      },
+      {
+        "principle": "Impact-justified funding",
+        "description": "Teams funded based on explicit claims about revenue growth, revenue protection, or cost reduction, typically argued through proxy metrics or intermediate concepts that teams can influence more directly."
+      },
+      {
+        "principle": "Throughput- or flow-justified funding",
+        "description": "Teams funded based on their role in increasing system throughput, reducing bottlenecks, or improving flow efficiency, rather than direct project delivery or revenue attribution."
+      },
+      {
+        "principle": "Product lifecycle–stage funding",
+        "description": "Teams funded according to the investment logic of the product’s lifecycle stage (New Offerings, Strategic Expansion, Growth Accelerator, Margin Optimization, Operational Optimizer, Reset & Repair)."
+      }
+    ]
+  },
+  {
+    "title": "How team performance is assessed",
+    "items": [
+      {
+        "principle": "Plan conformance",
+        "description": "Teams assessed on on-time and predictable delivery of predefined work."
+      },
+      {
+        "principle": "Output volume",
+        "description": "Teams assessed on volume of delivered features, requests, or completed work items."
+      },
+      {
+        "principle": "Acceptance-based delivery",
+        "description": "Teams assessed on delivering usable product that stakeholders or customers accept as meeting stated needs."
+      },
+      {
+        "principle": "Customer problem resolution",
+        "description": "Teams assessed on demonstrated improvement in customer experience or behavior, indicating that real customer problems have been solved."
+      },
+      {
+        "principle": "Modeled leading-indicator impact",
+        "description": "Teams assessed on their ability to influence actionable inputs or leading indicators that are explicitly modeled in causal chains linked to customer outcomes, business outcomes, or North Star Metrics."
+      },
+      {
+        "principle": "Financial impact proxies",
+        "description": "Teams assessed using financial proxy metrics such as margin contribution, cost per transaction, or revenue per user."
+      },
+      {
+        "principle": "Flow performance",
+        "description": "Teams assessed on cycle time, throughput, work-in-progress, queue health, or reliability of flow through the system."
+      },
+      {
+        "principle": "Customer experience signals",
+        "description": "Teams assessed on direct signals of customer experience such as satisfaction ratings, NPS, support volume, sentiment, or qualitative feedback."
+      },
+      {
+        "principle": "Risk and stability performance",
+        "description": "Teams assessed on reliability, operational stability, security posture, or risk reduction, often expressed through incident rates, uptime, or compliance metrics."
+      },
+      {
+        "principle": "Enablement performance",
+        "description": "Teams assessed on how effectively they enable or amplify the productivity of other teams through platforms, tooling, or shared services."
+      },
+      {
+        "principle": "Learning velocity",
+        "description": "Teams assessed on rate of discovery, experimentation, or validated learning in uncertain problem spaces."
+      }
+    ]
+  },
+  {
+    "title": "Team relationship to work",
+    "items": [
+      {
+        "principle": "Externally requested features",
+        "description": "Work originates from externally submitted requests. Requests are triaged, prioritized, and sometimes lightly researched before entering the team."
+      },
+      {
+        "principle": "Intermediary-defined requirements",
+        "description": "Work originates from requirements specified by business analysts, systems analysts, or similar intermediary roles, and then decomposed into team work items."
+      },
+      {
+        "principle": "Discovery on goals and gaps",
+        "description": "Work originates from research into user or stakeholder goals and unmet needs, leading to newly defined work."
+      },
+      {
+        "principle": "Surfaced opportunities and solution options",
+        "description": "Work originates from identified opportunities. Teams explore and propose solution paths before committing to delivery work."
+      },
+      {
+        "principle": "Experiments toward defined outcomes",
+        "description": "Work originates as experiments designed to test hypotheses or achieve defined outcomes or goals."
+      },
+      {
+        "principle": "Operational incidents or system signals",
+        "description": "Work originates from production issues, telemetry, reliability needs, or system health signals."
+      },
+      {
+        "principle": "Managerial task assignment",
+        "description": "Work originates from direct managerial direction or task assignment."
+      },
+      {
+        "principle": "Idea-driven initiatives",
+        "description": "Work originates from internally proposed ideas that gain traction through influence, advocacy, or leadership preference rather than formal discovery or demand signals."
+      },
+      {
+        "principle": "Fire- or urgency-driven work",
+        "description": "Work originates from the most immediate crisis, escalation, or urgent operational need at the time. Priority is set by perceived urgency rather than planned intent."
+      }
+    ]
+  },
+  {
+    "title": "How high level intent is communicated",
+    "items": [
+      {
+        "principle": "Project or program directives",
+        "description": "High-level intent is expressed as approved projects or programs. Teams receive defined initiatives rather than abstract context."
+      },
+      {
+        "principle": "Strategic pillars or themes",
+        "description": "High-level intent is expressed as broad priority areas. Teams interpret these into concrete work."
+      },
+      {
+        "principle": "Problem framing",
+        "description": "High-level intent is expressed as specific problems to solve. Teams determine solutions."
+      },
+      {
+        "principle": "Opportunity framing",
+        "description": "High-level intent is expressed as opportunity spaces to explore. Teams investigate and shape possible directions."
+      },
+      {
+        "principle": "Outcome or goal framing",
+        "description": "High-level intent is expressed as desired outcomes or goals. Teams define local objectives or initiatives to achieve them."
+      },
+      {
+        "principle": "Financial target framing",
+        "description": "High-level intent is expressed primarily through financial targets, forecasts, or line-item plans. Strategy discussions center on revenue, cost, or margin expectations."
+      },
+      {
+        "principle": "Mission or narrative framing",
+        "description": "High-level intent is expressed through mission, customer promise, or strategic narrative without explicit financial targets."
+      },
+      {
+        "principle": "Choice-constrained intent",
+        "description": "High-level intent communicates explicit choices about what will and will not be pursued. Teams operate within defined strategic boundaries."
+      },
+      {
+        "principle": "Open interpretive intent",
+        "description": "High-level intent provides direction but leaves trade-offs and choices largely to teams or local leadership."
+      }
+    ]
+  },
+  {
+    "title": "Team mandate levels",
+    "items": [
+      {
+        "principle": "Build to specification",
+        "description": "Teams are asked to build exactly what is specified to a predetermined definition."
+      },
+      {
+        "principle": "Build defined behavior",
+        "description": "Teams are asked to build something that performs specific behaviors, interactions, or input–output functions."
+      },
+      {
+        "principle": "Enable task completion",
+        "description": "Teams are asked to build something that allows a segment of users or customers to complete a defined task or goal."
+      },
+      {
+        "principle": "Solve a defined customer problem",
+        "description": "Teams are asked to solve an open-ended customer problem, with freedom in solution approach."
+      },
+      {
+        "principle": "Explore and improve customer experience",
+        "description": "Teams are asked to explore challenges and improve the experience for a segment of users or customers."
+      },
+      {
+        "principle": "Move a known business metric",
+        "description": "Teams are asked to increase or decrease a specific metric known to influence a business outcome."
+      },
+      {
+        "principle": "Explore leverage points through experiments",
+        "description": "Teams are asked to explore potential intervention points and run experiments to influence a business outcome."
+      },
+      {
+        "principle": "Generate short-term business outcome",
+        "description": "Teams are asked to directly produce a near-term business result."
+      },
+      {
+        "principle": "Generate long-term business outcome",
+        "description": "Teams are asked to build enduring capabilities or systems that produce sustained long-term business outcomes."
+      }
+    ]
+  }
+]
