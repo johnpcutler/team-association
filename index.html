@@ -14,22 +14,22 @@
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 max-w-7xl">
         <!-- Header -->
-        <header class="mb-12">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Org Sensing</h1>
-                    <p class="text-gray-700 text-base leading-relaxed max-w-3xl">Consider a team, group, or department in your company. Use the prompts and options below to explore different frames and lenses that might help you describe how it operates.</p>
+        <header class="mb-8 md:mb-12">
+            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-4 gap-4">
+                <div class="flex-1">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">Org Sensing</h1>
+                    <p class="text-gray-700 text-sm md:text-base leading-relaxed max-w-3xl">Consider a team, group, or department in your company. Use the prompts and options below to explore different frames and lenses that might help you describe how it operates.</p>
                 </div>
-                <div class="flex gap-3">
-                    <a href="org-sensing.pdf" download class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-sm transition-colors duration-200 no-underline inline-block">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <a href="org-sensing.pdf" download class="px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-sm transition-colors duration-200 no-underline inline-block text-center text-sm sm:text-base">
                         Download PDF
                     </a>
-                    <button id="shareButton" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors duration-200">
+                    <button id="shareButton" class="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors duration-200 text-sm sm:text-base">
                         Share
                     </button>
-                    <button id="clearButton" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-sm transition-colors duration-200">
+                    <button id="clearButton" class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg shadow-sm transition-colors duration-200 text-sm sm:text-base">
                         Clear All
                     </button>
                 </div>
@@ -37,30 +37,30 @@
         </header>
 
         <!-- Main Content -->
-        <div id="content" class="space-y-8">
+        <div id="content" class="space-y-6 md:space-y-8">
             <!-- Content will be dynamically loaded here -->
         </div>
     </div>
 
     <!-- Share Modal -->
-    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-gray-900">Share Org Sensing</h3>
-                <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Share Org Sensing</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl sm:text-3xl font-bold">&times;</button>
             </div>
-            <p class="text-gray-600 mb-4">Add a short note to include with your shared selections (optional):</p>
+            <p class="text-gray-600 mb-4 text-sm sm:text-base">Add a short note to include with your shared selections (optional):</p>
             <textarea 
                 id="noteInput" 
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none" 
+                class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm sm:text-base" 
                 rows="4" 
                 placeholder="Enter your note here..."
             ></textarea>
-            <div class="flex gap-3 mt-6">
-                <button id="cancelShare" class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition-colors duration-200">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
+                <button id="cancelShare" class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base">
                     Cancel
                 </button>
-                <button id="confirmShare" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200">
+                <button id="confirmShare" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 text-sm sm:text-base">
                     Generate Link
                 </button>
             </div>
@@ -267,16 +267,16 @@
                     
                     // Section header
                     const headerDiv = document.createElement('div');
-                    headerDiv.className = 'bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4';
+                    headerDiv.className = 'bg-gradient-to-r from-blue-600 to-blue-700 px-4 sm:px-6 py-3 sm:py-4';
                     const title = document.createElement('h2');
-                    title.className = 'text-2xl font-semibold text-white mb-2';
+                    title.className = 'text-xl sm:text-2xl font-semibold text-white mb-2';
                     title.textContent = section.title;
                     headerDiv.appendChild(title);
                     
                     // Add question if it exists
                     if (section.question) {
                         const question = document.createElement('p');
-                        question.className = 'text-blue-100 text-lg font-medium';
+                        question.className = 'text-blue-100 text-base sm:text-lg font-medium';
                         question.textContent = section.question;
                         headerDiv.appendChild(question);
                     }
@@ -285,36 +285,36 @@
                     
                     // Items container
                     const itemsDiv = document.createElement('div');
-                    itemsDiv.className = 'p-6';
+                    itemsDiv.className = 'p-4 sm:p-6';
                     
                     // Create grid for items
                     const gridDiv = document.createElement('div');
-                    gridDiv.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+                    gridDiv.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4';
                     
                     section.items.forEach((item, itemIndex) => {
                         const itemCard = document.createElement('div');
-                        itemCard.className = 'bg-gray-50 rounded-lg p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative';
+                        itemCard.className = 'bg-gray-50 rounded-lg p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative';
                         itemCard.dataset.sectionIndex = sectionIndex;
                         itemCard.dataset.itemIndex = itemIndex;
                         
                         // Create checkbox
                         const checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
-                        checkbox.className = 'absolute top-4 right-4 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer';
+                        checkbox.className = 'absolute top-3 right-3 sm:top-4 sm:right-4 w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer';
                         checkbox.id = `checkbox-${sectionIndex}-${itemIndex}`;
                         itemCard.appendChild(checkbox);
                         
                         // Card content wrapper
                         const contentWrapper = document.createElement('div');
-                        contentWrapper.className = 'pr-8';
+                        contentWrapper.className = 'pr-6 sm:pr-8';
                         
                         const principle = document.createElement('h3');
-                        principle.className = 'text-lg font-semibold text-gray-900 mb-2';
+                        principle.className = 'text-base sm:text-lg font-semibold text-gray-900 mb-2';
                         principle.textContent = item.principle;
                         contentWrapper.appendChild(principle);
                         
                         const description = document.createElement('p');
-                        description.className = 'text-gray-700 text-sm leading-relaxed';
+                        description.className = 'text-gray-700 text-xs sm:text-sm leading-relaxed';
                         description.textContent = item.description;
                         contentWrapper.appendChild(description);
                         
