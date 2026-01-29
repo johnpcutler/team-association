@@ -159,7 +159,7 @@
             const currentIndex = STATUSES.indexOf(currentStatus);
             
             const container = document.createElement('div');
-            container.className = 'status-indicator flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-sm border border-gray-200';
+            container.className = 'status-indicator flex items-center gap-0.5 sm:gap-1 bg-white rounded-full px-1 sm:px-1.5 py-0.5 sm:py-1 shadow-sm border border-gray-200';
             container.setAttribute('data-status-key', statusKey);
             
             // Color mapping for Tailwind classes
@@ -171,15 +171,25 @@
                 'retiring': { active: 'bg-orange-500', inactive: 'bg-orange-200 hover:bg-orange-300' }
             };
             
+            // Ring classes for active dots
+            const ringClasses = {
+                'not-present': 'ring-gray-300',
+                'aspirational': 'ring-purple-300',
+                'emerging': 'ring-blue-300',
+                'ubiquitous': 'ring-green-300',
+                'retiring': 'ring-orange-300'
+            };
+            
             // Create 5 dots representing the 5 statuses
             STATUSES.forEach((status, index) => {
                 const dot = document.createElement('div');
                 const isActive = index === currentIndex;
                 const colors = colorClasses[status];
+                const ring = ringClasses[status];
                 
-                dot.className = `w-2 h-2 rounded-full transition-all duration-200 cursor-pointer ${
+                dot.className = `w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-200 cursor-pointer ${
                     isActive 
-                        ? `${colors.active} scale-125` 
+                        ? `${colors.active} scale-110 ring-1 ring-offset-0.5 ${ring}` 
                         : `${colors.inactive}`
                 }`;
                 dot.setAttribute('data-status', status);
@@ -233,14 +243,23 @@
                 'retiring': { active: 'bg-orange-500', inactive: 'bg-orange-200 hover:bg-orange-300' }
             };
             
+            const ringClasses = {
+                'not-present': 'ring-gray-300',
+                'aspirational': 'ring-purple-300',
+                'emerging': 'ring-blue-300',
+                'ubiquitous': 'ring-green-300',
+                'retiring': 'ring-orange-300'
+            };
+            
             indicator.querySelectorAll('[data-index]').forEach((dot, index) => {
                 const status = STATUSES[index];
                 const colors = colorClasses[status];
+                const ring = ringClasses[status];
                 const isActive = index === currentIndex;
                 
-                dot.className = `w-2 h-2 rounded-full transition-all duration-200 cursor-pointer ${
+                dot.className = `w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-200 cursor-pointer ${
                     isActive 
-                        ? `${colors.active} scale-125` 
+                        ? `${colors.active} scale-110 ring-1 ring-offset-0.5 ${ring}` 
                         : `${colors.inactive}`
                 }`;
             });
@@ -267,20 +286,6 @@
             
             const styles = statusStyles[status] || statusStyles['not-present'];
             card.classList.add(...styles);
-            
-            // Update always-visible badge
-            const badge = document.getElementById(`status-badge-${statusKey}`);
-            if (badge) {
-                const badgeColors = {
-                    'not-present': 'bg-gray-300',
-                    'aspirational': 'bg-purple-400',
-                    'emerging': 'bg-blue-400',
-                    'ubiquitous': 'bg-green-400',
-                    'retiring': 'bg-orange-400'
-                };
-                badge.className = `absolute top-2 right-2 w-2 h-2 rounded-full ${badgeColors[status] || badgeColors['not-present']}`;
-                badge.style.display = status === 'not-present' ? 'none' : 'block';
-            }
         }
         
         // Clear all statuses
@@ -508,16 +513,10 @@
                         itemCard.dataset.itemIndex = itemIndex;
                         itemCard.dataset.statusKey = statusKey;
                         
-                        // Status indicator (subtle, appears on hover)
+                        // Status indicator (visible on hover)
                         const statusIndicator = createStatusIndicatorElement(statusKey);
-                        statusIndicator.className += ' absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10';
+                        statusIndicator.className += ' absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200';
                         itemCard.appendChild(statusIndicator);
-                        
-                        // Small always-visible indicator for non-default statuses
-                        const statusBadge = document.createElement('div');
-                        statusBadge.className = 'absolute top-2 right-2 w-2 h-2 rounded-full bg-gray-300';
-                        statusBadge.id = `status-badge-${statusKey}`;
-                        itemCard.appendChild(statusBadge);
                         
                         // Card content wrapper
                         const contentWrapper = document.createElement('div');
