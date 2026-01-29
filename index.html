@@ -508,7 +508,7 @@
                     section.items.forEach((item, itemIndex) => {
                         const statusKey = `${sectionIndex}-${itemIndex}`;
                         const itemCard = document.createElement('div');
-                        itemCard.className = 'bg-gray-50 rounded-lg p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative group';
+                        itemCard.className = 'bg-gray-50 rounded-lg p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative group select-none';
                         itemCard.dataset.sectionIndex = sectionIndex;
                         itemCard.dataset.itemIndex = itemIndex;
                         itemCard.dataset.statusKey = statusKey;
