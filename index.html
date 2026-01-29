@@ -36,6 +36,68 @@
             </div>
         </header>
 
+        <!-- Status Guide -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 mb-6 md:mb-8">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">How to Use Status Indicators</h2>
+            <p class="text-gray-600 text-sm sm:text-base mb-4">Each card represents an organizational principle. Click a card to cycle through status levels, or hover to see the status selector.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 sm:gap-4">
+                <!-- Not Present -->
+                <div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg border-2 border-gray-200">
+                    <div class="w-8 h-8 rounded-full bg-gray-400 mb-2 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-white"></div>
+                    </div>
+                    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 mb-1 text-center">Not Present</h3>
+                    <p class="text-xs text-gray-600 text-center">Default state</p>
+                </div>
+                
+                <!-- Aspirational -->
+                <div class="flex flex-col items-center p-3 bg-purple-50 rounded-lg border-2 border-purple-500">
+                    <div class="w-8 h-8 rounded-full bg-purple-500 mb-2 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-white"></div>
+                    </div>
+                    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 mb-1 text-center">Aspirational</h3>
+                    <p class="text-xs text-gray-600 text-center">Desired future</p>
+                </div>
+                
+                <!-- Emerging -->
+                <div class="flex flex-col items-center p-3 bg-blue-50 rounded-lg border-2 border-blue-500">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 mb-2 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-white"></div>
+                    </div>
+                    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 mb-1 text-center">Emerging</h3>
+                    <p class="text-xs text-gray-600 text-center">Starting to appear</p>
+                </div>
+                
+                <!-- Ubiquitous -->
+                <div class="flex flex-col items-center p-3 bg-green-50 rounded-lg border-2 border-green-500">
+                    <div class="w-8 h-8 rounded-full bg-green-500 mb-2 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-white"></div>
+                    </div>
+                    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 mb-1 text-center">Ubiquitous</h3>
+                    <p class="text-xs text-gray-600 text-center">Widely present</p>
+                </div>
+                
+                <!-- Retiring -->
+                <div class="flex flex-col items-center p-3 bg-orange-50 rounded-lg border-2 border-orange-500">
+                    <div class="w-8 h-8 rounded-full bg-orange-500 mb-2 flex items-center justify-center">
+                        <div class="w-3 h-3 rounded-full bg-white"></div>
+                    </div>
+                    <h3 class="text-xs sm:text-sm font-semibold text-gray-900 mb-1 text-center">Retiring</h3>
+                    <p class="text-xs text-gray-600 text-center">Being phased out</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
+                    <div class="flex items-start gap-2">
+                        <span class="font-semibold text-gray-700">💡 Tip:</span>
+                        <span>Click any card to cycle through statuses, or hover to see the 5-dot selector</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Content -->
         <div id="content" class="space-y-6 md:space-y-8">
             <!-- Content will be dynamically loaded here -->
@@ -71,16 +133,164 @@
         // Store sections data globally for share functionality
         let sectionsData = [];
         
-        // Clear all checkboxes
+        // Status system
+        const STATUSES = ['not-present', 'aspirational', 'emerging', 'ubiquitous', 'retiring'];
+        const STATUS_LABELS = {
+            'not-present': 'Not present',
+            'aspirational': 'Aspirational',
+            'emerging': 'Emerging',
+            'ubiquitous': 'Ubiquitous',
+            'retiring': 'Retiring'
+        };
+        const STATUS_COLORS = {
+            'not-present': 'gray',
+            'aspirational': 'purple',
+            'emerging': 'blue',
+            'ubiquitous': 'green',
+            'retiring': 'orange'
+        };
+        
+        // Status storage: { 'section-item': 'status' }
+        const statusMap = new Map();
+        
+        // Create status indicator UI element
+        function createStatusIndicatorElement(statusKey) {
+            const currentStatus = statusMap.get(statusKey) || 'not-present';
+            const currentIndex = STATUSES.indexOf(currentStatus);
+            
+            const container = document.createElement('div');
+            container.className = 'status-indicator flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-sm border border-gray-200';
+            container.setAttribute('data-status-key', statusKey);
+            
+            // Color mapping for Tailwind classes
+            const colorClasses = {
+                'not-present': { active: 'bg-gray-500', inactive: 'bg-gray-200 hover:bg-gray-300' },
+                'aspirational': { active: 'bg-purple-500', inactive: 'bg-purple-200 hover:bg-purple-300' },
+                'emerging': { active: 'bg-blue-500', inactive: 'bg-blue-200 hover:bg-blue-300' },
+                'ubiquitous': { active: 'bg-green-500', inactive: 'bg-green-200 hover:bg-green-300' },
+                'retiring': { active: 'bg-orange-500', inactive: 'bg-orange-200 hover:bg-orange-300' }
+            };
+            
+            // Create 5 dots representing the 5 statuses
+            STATUSES.forEach((status, index) => {
+                const dot = document.createElement('div');
+                const isActive = index === currentIndex;
+                const colors = colorClasses[status];
+                
+                dot.className = `w-2 h-2 rounded-full transition-all duration-200 cursor-pointer ${
+                    isActive 
+                        ? `${colors.active} scale-125` 
+                        : `${colors.inactive}`
+                }`;
+                dot.setAttribute('data-status', status);
+                dot.setAttribute('data-index', index);
+                dot.title = STATUS_LABELS[status];
+                
+                // Click on dot to jump to that status
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const card = document.querySelector(`[data-status-key="${statusKey}"]`);
+                    if (card) {
+                        setStatus(statusKey, status, card);
+                    }
+                });
+                
+                container.appendChild(dot);
+            });
+            
+            return container;
+        }
+        
+        // Cycle through statuses
+        function cycleStatus(statusKey, card) {
+            const currentStatus = statusMap.get(statusKey) || 'not-present';
+            const currentIndex = STATUSES.indexOf(currentStatus);
+            const nextIndex = (currentIndex + 1) % STATUSES.length;
+            const nextStatus = STATUSES[nextIndex];
+            setStatus(statusKey, nextStatus, card);
+        }
+        
+        // Set status for an item
+        function setStatus(statusKey, status, card) {
+            statusMap.set(statusKey, status);
+            updateCardStyle(card, status);
+            updateStatusIndicator(statusKey);
+        }
+        
+        // Update status indicator visual
+        function updateStatusIndicator(statusKey) {
+            const indicator = document.querySelector(`.status-indicator[data-status-key="${statusKey}"]`);
+            if (!indicator) return;
+            
+            const currentStatus = statusMap.get(statusKey) || 'not-present';
+            const currentIndex = STATUSES.indexOf(currentStatus);
+            
+            const colorClasses = {
+                'not-present': { active: 'bg-gray-500', inactive: 'bg-gray-200 hover:bg-gray-300' },
+                'aspirational': { active: 'bg-purple-500', inactive: 'bg-purple-200 hover:bg-purple-300' },
+                'emerging': { active: 'bg-blue-500', inactive: 'bg-blue-200 hover:bg-blue-300' },
+                'ubiquitous': { active: 'bg-green-500', inactive: 'bg-green-200 hover:bg-green-300' },
+                'retiring': { active: 'bg-orange-500', inactive: 'bg-orange-200 hover:bg-orange-300' }
+            };
+            
+            indicator.querySelectorAll('[data-index]').forEach((dot, index) => {
+                const status = STATUSES[index];
+                const colors = colorClasses[status];
+                const isActive = index === currentIndex;
+                
+                dot.className = `w-2 h-2 rounded-full transition-all duration-200 cursor-pointer ${
+                    isActive 
+                        ? `${colors.active} scale-125` 
+                        : `${colors.inactive}`
+                }`;
+            });
+        }
+        
+        // Update card styling based on status
+        function updateCardStyle(card, status) {
+            const statusKey = card.dataset.statusKey;
+            
+            // Remove all status classes
+            card.classList.remove(
+                'bg-gray-50', 'bg-purple-50', 'bg-blue-50', 'bg-green-50', 'bg-orange-50',
+                'border-gray-200', 'border-purple-500', 'border-blue-500', 'border-green-500', 'border-orange-500'
+            );
+            
+            // Apply status-specific styling
+            const statusStyles = {
+                'not-present': ['bg-gray-50', 'border-gray-200'],
+                'aspirational': ['bg-purple-50', 'border-purple-500'],
+                'emerging': ['bg-blue-50', 'border-blue-500'],
+                'ubiquitous': ['bg-green-50', 'border-green-500'],
+                'retiring': ['bg-orange-50', 'border-orange-500']
+            };
+            
+            const styles = statusStyles[status] || statusStyles['not-present'];
+            card.classList.add(...styles);
+            
+            // Update always-visible badge
+            const badge = document.getElementById(`status-badge-${statusKey}`);
+            if (badge) {
+                const badgeColors = {
+                    'not-present': 'bg-gray-300',
+                    'aspirational': 'bg-purple-400',
+                    'emerging': 'bg-blue-400',
+                    'ubiquitous': 'bg-green-400',
+                    'retiring': 'bg-orange-400'
+                };
+                badge.className = `absolute top-2 right-2 w-2 h-2 rounded-full ${badgeColors[status] || badgeColors['not-present']}`;
+                badge.style.display = status === 'not-present' ? 'none' : 'block';
+            }
+        }
+        
+        // Clear all statuses
         function clearAll() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-                const card = checkbox.closest('[data-section-index]');
-                if (card) {
-                    card.classList.remove('bg-blue-50', 'border-blue-500');
-                    card.classList.add('bg-gray-50', 'border-gray-200');
-                }
+            statusMap.clear();
+            
+            // Reset all cards to default
+            document.querySelectorAll('[data-status-key]').forEach(card => {
+                const statusKey = card.dataset.statusKey;
+                setStatus(statusKey, 'not-present', card);
             });
             
             // Clear URL parameters (remove shared state)
@@ -95,16 +305,16 @@
             }
         }
         
-        // Get all selected items
+        // Get all items with status (excluding 'not-present')
         function getSelectedItems() {
             const selected = [];
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            checkboxes.forEach(checkbox => {
-                const card = checkbox.closest('[data-section-index]');
-                if (card) {
+            statusMap.forEach((status, statusKey) => {
+                if (status !== 'not-present') {
+                    const [section, item] = statusKey.split('-').map(Number);
                     selected.push({
-                        section: parseInt(card.dataset.sectionIndex),
-                        item: parseInt(card.dataset.itemIndex)
+                        section,
+                        item,
+                        status
                     });
                 }
             });
@@ -151,7 +361,7 @@
             const selected = getSelectedItems();
             
             if (selected.length === 0) {
-                alert('Please select at least one option before sharing.');
+                alert('Please set at least one option to a status other than "Not present" before sharing.');
                 hideShareModal();
                 return;
             }
@@ -200,7 +410,7 @@
             const selected = getSelectedItems();
             
             if (selected.length === 0) {
-                alert('Please select at least one option before sharing.');
+                alert('Please set at least one option to a status other than "Not present" before sharing.');
                 return;
             }
             
@@ -238,16 +448,15 @@
                 }
             }
             
-            // Restore selections
-            selections.forEach(({ section, item }) => {
-                const checkbox = document.getElementById(`checkbox-${section}-${item}`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                    const card = checkbox.closest('[data-section-index]');
-                    if (card) {
-                        card.classList.remove('bg-gray-50', 'border-gray-200');
-                        card.classList.add('bg-blue-50', 'border-blue-500');
-                    }
+            // Restore selections with backward compatibility
+            selections.forEach(({ section, item, status }) => {
+                const statusKey = `${section}-${item}`;
+                const card = document.querySelector(`[data-status-key="${statusKey}"]`);
+                
+                if (card) {
+                    // Backward compatibility: if no status, default to 'emerging'
+                    const restoredStatus = status || 'emerging';
+                    setStatus(statusKey, restoredStatus, card);
                 }
             });
         }
@@ -292,17 +501,23 @@
                     gridDiv.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4';
                     
                     section.items.forEach((item, itemIndex) => {
+                        const statusKey = `${sectionIndex}-${itemIndex}`;
                         const itemCard = document.createElement('div');
-                        itemCard.className = 'bg-gray-50 rounded-lg p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative';
+                        itemCard.className = 'bg-gray-50 rounded-lg p-4 sm:p-5 border-2 border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer relative group';
                         itemCard.dataset.sectionIndex = sectionIndex;
                         itemCard.dataset.itemIndex = itemIndex;
+                        itemCard.dataset.statusKey = statusKey;
                         
-                        // Create checkbox
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.className = 'absolute top-3 right-3 sm:top-4 sm:right-4 w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer';
-                        checkbox.id = `checkbox-${sectionIndex}-${itemIndex}`;
-                        itemCard.appendChild(checkbox);
+                        // Status indicator (subtle, appears on hover)
+                        const statusIndicator = createStatusIndicatorElement(statusKey);
+                        statusIndicator.className += ' absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10';
+                        itemCard.appendChild(statusIndicator);
+                        
+                        // Small always-visible indicator for non-default statuses
+                        const statusBadge = document.createElement('div');
+                        statusBadge.className = 'absolute top-2 right-2 w-2 h-2 rounded-full bg-gray-300';
+                        statusBadge.id = `status-badge-${statusKey}`;
+                        itemCard.appendChild(statusBadge);
                         
                         // Card content wrapper
                         const contentWrapper = document.createElement('div');
@@ -320,29 +535,21 @@
                         
                         itemCard.appendChild(contentWrapper);
                         
-                        // Toggle functionality
-                        const toggleCard = (e) => {
-                            // Don't toggle if clicking directly on checkbox (it handles itself)
-                            if (e.target === checkbox) return;
-                            
-                            checkbox.checked = !checkbox.checked;
-                            updateCardStyle(itemCard, checkbox.checked);
-                        };
-                        
-                        const updateCardStyle = (card, isChecked) => {
-                            if (isChecked) {
-                                card.classList.remove('bg-gray-50', 'border-gray-200');
-                                card.classList.add('bg-blue-50', 'border-blue-500');
-                            } else {
-                                card.classList.remove('bg-blue-50', 'border-blue-500');
-                                card.classList.add('bg-gray-50', 'border-gray-200');
-                            }
-                        };
-                        
-                        itemCard.addEventListener('click', toggleCard);
-                        checkbox.addEventListener('change', (e) => {
-                            updateCardStyle(itemCard, e.target.checked);
+                        // Status click handler - cycle through statuses
+                        itemCard.addEventListener('click', (e) => {
+                            // Don't cycle if clicking on status indicator (it handles itself)
+                            if (e.target.closest('.status-indicator')) return;
+                            cycleStatus(statusKey, itemCard);
                         });
+                        
+                        // Initialize status
+                        const currentStatus = statusMap.get(statusKey) || 'not-present';
+                        updateCardStyle(itemCard, currentStatus);
+                        
+                        // Update status indicator after a brief delay to ensure DOM is ready
+                        setTimeout(() => {
+                            updateStatusIndicator(statusKey);
+                        }, 10);
                         
                         gridDiv.appendChild(itemCard);
                     });
